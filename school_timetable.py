@@ -1,6 +1,5 @@
 import requests
-from selenium import webdriver
-from selenium.common import exceptions
+from bs4 import BeautifulSoup
 
 import time, datetime
 from random import Random
@@ -12,29 +11,31 @@ from os import system
 
 class GetClassData(object):
 
-    def main(self):
-        print("开始爬取课程表。校外用户记得挂VPN")
-        self.username = input("请输入学号:")
-        self.password = input("请输入教务密码:")
-        classDataList = self.spider()
-        print("爬取课表成功！")
-        return classDataList
+    def login(self):
 
-    def loads(self):
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.50"
+        }
 
-        url_signin = 'http://jwxt.cumt.edu.cn/jwglxt/xtgl/login_slogin.html#'
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('log-level=3')
-        browser = webdriver.Edge()
-        browser.get(url_signin)
-        browser.maximize_window()
-        # 自动填充
-        browser.find_element_by_id('yhm').send_keys(self.username) #用户名
-        browser.find_element_by_id('mm').send_keys(self.password)   #密码
-        time.sleep(2)
-        input("请在登录成功后输入2：")
-        cookie = browser.get_cookies()
-        return cookie
+        form = {
+            "username": self.username,
+            "password": self.password,
+            "signIn": ""
+        }
+
+        url_index = "http://ids.cumt.edu.cn/authserver/login?service=http%3A%2F%2Fmy.cumt.edu.cn%2Flogin.portal"
+        url_jw_index = "http://jiaowujizhong.cumt.edu.cn:8080/jwjz/"
+        url_jwxt = "http://jwxt.cumt.edu.cn/sso/jzIdsFivelogin"
+
+        self.session = requests.session()
+        resp = self.session.get(url=url_index, headers=self.headers)
+        soup = BeautifulSoup(resp.text, 'lxml')
+        blocks = soup.find_all(type="hidden")
+        for block in blocks[:-1]:
+            form[block["name"]] = block["value"]
+        resp = self.session.post(url=url_index, headers=self.headers, data=form)
+        resp = self.session.get(url=url_jw_index, headers=self.headers)
+        resp = self.session.get(url=url_jwxt, headers=self.headers)
 
     def spider(self):
         # 构建url
@@ -48,15 +49,7 @@ class GetClassData(object):
             "xqm":xqm
         }
         # 请求
-        print("让我们实现一下模拟登录：")
-        print("请输入1，并在接下来的弹出浏览器中，输入验证码并点击登录，然后回到本程序输入2：")
-        input("请忽视下面的一堆控制台输出。。。直接输入 1 或 2：")
-        cookie = self.loads()
-        headers = {
-            "Cookie": 'JSESSIONID=' + cookie[1]['value'] + '; X-LB=' + cookie[0]['value'],
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.50"
-        }
-        response = requests.post(url=url, data=form, headers=headers)
+        response = self.session.post(url=url, data=form, headers=self.headers)
         data = response.json()
         if data:
         # 处理json
@@ -163,6 +156,17 @@ class GetClassData(object):
         else:
             print("爬取结果为空，请检查参数是否正确")
             raise Exception("爬虫参数错误")
+
+    def main(self):
+        print("开始爬取课程表。校外用户记得挂VPN")
+        self.username = input("请输入学号:")
+        self.password = input("请输入旧版统一身份认证（http://ids.cumt.edu.cn/authserver/login）密码:")
+        print("正在尝试模拟登录，校外用户务必挂上VPN")
+        self.login()
+        print("模拟登陆成功")
+        classDataList = self.spider()
+        print("爬取课表成功！")
+        return classDataList
         
 
 class CheckTools(object):
@@ -215,7 +219,7 @@ class TimetableMaker(object):
 
     # 配置生成相关信息
     def data_load(self):
-        print("为了生成课表，请提供以下信息：")
+        print("为了生成课表ics文件，请提供以下信息：")
         firstWeekDate = input("请设置第一周的星期一日期(如：20210301):")
         # 检查输入数据
         firstWeekDate = CheckTools().checkInput(1, firstWeekDate)
@@ -249,8 +253,6 @@ class TimetableMaker(object):
                 "endTime":"2045"
             }
         ]
-        # 处理课程信息
-        self.classInfoList = GetClassData().main()
         # 设置上课提醒
         reminder = input("请输入数字选择上课提醒时间\n【0】不提醒\n【1】上课前 10 分钟提醒\n【2】上课前 30 分钟提醒\n【3】上课前 1 小时提醒\n【4】上课前 2 小时提醒\n【5】上课前 1 天提醒\n请输入你的选项：")
         reminder = CheckTools().checkInput(2, reminder)
@@ -355,6 +357,7 @@ class TimetableMaker(object):
             print("ics文件已生成，请导入日历app中使用")
 
     def main(self):
+        self.classInfoList = GetClassData().main()  # 爬取教务，处理课程信息
         self.data_load()
         self.uniteSetting()
         self.classInfoHandle()
@@ -364,14 +367,10 @@ class TimetableMaker(object):
 if __name__ == '__main__':
     try:
         TimetableMaker().main()
-    except IndexError as e:
-        print("发生错误,请检查输入参数是否有误")
-    except ValueError as e:
-        print("发生错误,请检查输入参数是否有误")
-    except exceptions.SessionNotCreatedException as e:
-        print("发生错误,请检查浏览器驱动版本是否过低")
+    except requests.exceptions.ConnectionError as e:
+        print("网络连接错误，请检查是否挂上VPN")
     except Exception as e:
-        print("发生错误")
+        print("发生错误,请检查输入参数是否有误")
     finally:
         system("pause")
 
