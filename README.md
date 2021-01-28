@@ -6,4 +6,5 @@
 
 项目使用说明：[爬取矿大教务课表，并生成ics文件导入各大日历app中 —— CSDN](https://blog.csdn.net/qq_45355034/article/details/113103504)
 
-项目需要 Edge 驱动，请自行下载：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
+~~项目需要 Edge 驱动，请自行下载：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/~~
+(最新版本已不需要，注意校外用户需挂上VPN)
