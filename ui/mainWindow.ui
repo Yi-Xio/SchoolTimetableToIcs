@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1032</width>
-    <height>587</height>
+    <height>612</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,7 +90,7 @@
         <item alignment="Qt::AlignHCenter">
          <widget class="QLabel" name="shower">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>

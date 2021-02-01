@@ -43,7 +43,6 @@ class MainWindow(QMainWindow):
         self.ui.checkDate.clicked.connect(self.checkDate)
         self.ui.buttonGroup.buttonClicked.connect(self.getReminder)
 
-
     def doMain(self):
         # 读取参数
         self.username = self.ui.username.text()
@@ -62,7 +61,6 @@ class MainWindow(QMainWindow):
         thread_1.start()
 
     def printStrToGui(self, string):
-        self.flag = False
         self.ui.shower.setText(string)
 
     def printStrToCheckShower(self, string):
@@ -86,6 +84,7 @@ class MainWindow(QMainWindow):
                 # 生成ics文件
                 timetableMaker.TimetableMaker(self.classInfoList, self.reminder, self.date).main()
                 # 发出消息
+                self.flag = False
                 self.printStrToGui("已在同级目录下生成ics文件成功")
             else:
                 self.global_ms.error_print.emit("请不要遗漏所需信息")
@@ -95,7 +94,6 @@ class MainWindow(QMainWindow):
             self.global_ms.error_print.emit("登录错误，请检查用户名或密码")
         except getClassData.SpiderException:
             self.global_ms.error_print.emit("没有查到课表，请检查所提供的信息")
-
 
     def threadFunc_2(self, msg):
         # shower 的循环处理
