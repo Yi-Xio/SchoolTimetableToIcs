@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
             self.xqm = 3
         # 获取课表
         # 涉及HTTP请求，新建一个线程处理
-        thread_1 = Thread(target=self.threadFunc_1)
+        thread_1 = Thread(target=self.threadFunc_1, daemon=True)
         thread_1.start()
 
     def printStrToGui(self, string):
@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
             # 注意 self.reminder 可能取 0
             if self.date and self.reminder != '' and self.username and self.password and self.xnm and self.xqm:
                 # shower 的循环播报
-                thread_2 = Thread(target=self.threadFunc_2, args=("正在查询课表并生成ics文件",))
+                thread_2 = Thread(target=self.threadFunc_2, args=("正在查询课表并生成ics文件",), daemon=True)
                 thread_2.start()
                 # 查询课程表
                 self.classInfoList = getClassData.GetClassData(self.username, self.password, self.xnm, self.xqm).main()
