@@ -1,10 +1,15 @@
 # SchoolTimetable of CUMT
 
-本项目可爬取中国矿业大学教务课表，分析并生成ics文件，供导入各大日历app中添加日程
+## 免责声明
+若本项目侵犯了您或您的公司的权益，请联系作者，作者将会在第一时间下线项目
+
+## 项目说明
+
+本项目可分析中国矿业大学教务课表，生成ics文件，供导入各大日历app中添加日程
 
 项目思路参考：[university-timetable-ics](https://github.com/upuphero/university-timetable-ics)(基本上重构了代码)
 
-项目使用说明：[爬取矿大教务课表，并生成ics文件导入各大日历app中 —— CSDN](https://blog.csdn.net/qq_45355034/article/details/113103504)
+项目使用说明：[矿大课表ics文件生成小工具 —— CSDN](https://blog.csdn.net/qq_45355034/article/details/113103504)
 
 ## 更新说明
 - 2021.3.5
