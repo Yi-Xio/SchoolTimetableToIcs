@@ -79,7 +79,8 @@ class TimetableMaker(object):
             startWeek = json.dumps(classInfo["week"]["startWeek"])
             endWeek = json.dumps(classInfo["week"]["endWeek"])
             weekday = float(json.dumps(classInfo["weekday"]))
-
+            # print(classInfo)
+            # print(startWeek, endWeek, weekday)
             # print(classInfo)
             dateLength = float((int(startWeek[1:-1]) - 1) * 7)
             startDate = datetime.datetime.fromtimestamp(int(time.mktime(self.DONE_firstWeekDate))) + datetime.timedelta(

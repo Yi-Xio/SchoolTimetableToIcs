@@ -204,7 +204,7 @@
               <item alignment="Qt::AlignHCenter">
                <widget class="QLabel" name="label_3">
                 <property name="text">
-                 <string>旧版统一身份认证密码</string>
+                 <string>融合门户登录密码</string>
                 </property>
                </widget>
               </item>
@@ -280,6 +280,16 @@
                   <item>
                    <property name="text">
                     <string>2022-2023</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2023-2024</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2024-2025</string>
                    </property>
                   </item>
                  </widget>

@@ -1,3 +1,4 @@
+import traceback
 from threading import Thread
 
 import requests
@@ -23,7 +24,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.setWindowTitle("ICS生成小工具")
         # 设置超链
-        self.ui.link.setText(u'<a href="https://blog.csdn.net/qq_45355034/article/details/113103504" style="color:#0000ff;"><b> 右键此处选择复制教程网址到浏览器打开（Copy Link Location） </b></a>')
+        self.ui.link.setText(u'<a href="https://blog.csdn.net/qq_45355034/article/details/113103504" style="color:#0000ff;"><b> 右键此处,选择复制教程网址（Copy Link Location）,到浏览器打开 </b></a>')
         # 一些变量
         self.username = ''
         self.password = ''
@@ -91,9 +92,12 @@ class MainWindow(QMainWindow):
         except requests.exceptions.ConnectionError:
             self.global_ms.error_print.emit("网络错误，校外用户请检查是否连接VPN")
         except getClassData.LoginException:
-            self.global_ms.error_print.emit("登录错误，请检查用户名或密码")
+            self.global_ms.error_print.emit("登录错误，请检查用户名或密码。\n若确认无误，请前往学校融合门户 http://authserver.cumt.edu.cn/authserver/login，输入学号，检查是否需要输入验证码")
         except getClassData.SpiderException:
             self.global_ms.error_print.emit("没有查到课表，请检查所提供的信息")
+        except Exception as e:
+            print(traceback.format_exc())
+            self.global_ms.error_print.emit("出现错误，请联系开发者")
 
     def threadFunc_2(self, msg):
         # shower 的循环处理

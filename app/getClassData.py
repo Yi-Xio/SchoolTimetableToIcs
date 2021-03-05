@@ -1,7 +1,7 @@
-import requests
-from bs4 import BeautifulSoup
 import re
 import copy
+
+from app.login import login
 
 
 class LoginException(Exception):
@@ -22,33 +22,15 @@ class GetClassData(object):
         self.password = password
         self.xnm = xnm
         self.xqm = xqm
-        self.session = self.login()
+        self.session = ''
+        self.login()
 
     def login(self):
-
-        url_index = "http://ids.cumt.edu.cn/authserver/login?service=http%3A%2F%2Fmy.cumt.edu.cn%2Flogin.portal"
-        url_jw_index = "http://jiaowujizhong.cumt.edu.cn:8080/jwjz/"
-        url_jwxt = "http://jwxt.cumt.edu.cn/sso/jzIdsFivelogin"
-
-        form = {
-            "username": self.username,
-            "password": self.password,
-            "signIn": ""
-        }
-
-        session = requests.session()
-
-        resp = session.get(url=url_index, headers=self.headers)
-        soup = BeautifulSoup(resp.text, 'lxml')
-        blocks = soup.find_all(type="hidden")
-        for block in blocks[:-1]:
-            form[block["name"]] = block["value"]
-        resp = session.post(url=url_index, headers=self.headers, data=form)
-        if re.search("欢迎访问信息服务门户", resp.text):
-            resp = session.get(url=url_jw_index, headers=self.headers)
-            resp = session.get(url=url_jwxt, headers=self.headers)
-            return session
-        else:
+        try:
+            self.session = login(self.username, self.password)
+            if not self.session:
+                raise LoginException()
+        except Exception as e:
             raise LoginException()
 
     def spider(self):
@@ -133,8 +115,8 @@ class GetClassData(object):
                         for iWeek in range(startWeek, endWeek + 1, 2):
                             iclassInfo_new = copy.deepcopy(classInfo)
                             iclassInfo_new["week"] = {
-                                "startWeek": iWeek,
-                                "endWeek": iWeek
+                                "startWeek": str(iWeek),
+                                "endWeek": str(iWeek)
                             }
                             classDataList.append(iclassInfo_new)
                     else:
@@ -149,8 +131,8 @@ class GetClassData(object):
                             cop = re.compile("\D")
                             endWeek = cop.sub('', endWeek)
                             classInfo_new["week"] = {
-                                "startWeek": startWeek,
-                                "endWeek": endWeek
+                                "startWeek": str(startWeek),
+                                "endWeek": str(endWeek)
                             }
                             classDataList.append(classInfo_new)
                         # 处理情况四：“11周” 只有一周
@@ -159,8 +141,8 @@ class GetClassData(object):
                             cop = re.compile("\D")
                             startWeek = cop.sub('', startWeek)
                             classInfo_new["week"] = {
-                                "startWeek": startWeek,
-                                "endWeek": startWeek
+                                "startWeek": str(startWeek),
+                                "endWeek": str(startWeek)
                             }
                             classDataList.append(classInfo_new)
             # print(classDataList)
