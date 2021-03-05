@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
         except requests.exceptions.ConnectionError:
             self.global_ms.error_print.emit("网络错误，校外用户请检查是否连接VPN")
         except getClassData.LoginException:
-            self.global_ms.error_print.emit("登录错误，请检查用户名或密码。\n若确认无误，请前往学校融合门户 http://authserver.cumt.edu.cn/authserver/login，输入学号，检查是否需要输入验证码")
+            self.global_ms.error_print.emit("登录错误，请检查用户名或密码。\n若确认无误，请检查：\n1.aes.js文件是否在同一文件夹下\n2.前往学校融合门户 http://authserver.cumt.edu.cn/authserver/login，输入学号，检查是否需要输入验证码")
         except getClassData.SpiderException:
             self.global_ms.error_print.emit("没有查到课表，请检查所提供的信息")
         except Exception as e:
