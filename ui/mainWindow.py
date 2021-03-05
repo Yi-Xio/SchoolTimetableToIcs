@@ -50,6 +50,14 @@ class Ui_MainWindow(object):
 "}")
         self.label_9.setObjectName("label_9")
         self.verticalLayout_14.addWidget(self.label_9, 0, QtCore.Qt.AlignHCenter)
+        self.label_10 = QtWidgets.QLabel(self.centralwidget)
+        self.label_10.setStyleSheet("QLabel#label_10{\n"
+"    font-family:微软雅黑;\n"
+"    font-size:20px;\n"
+"    color:\"red\"\n"
+"}")
+        self.label_10.setObjectName("label_10")
+        self.verticalLayout_14.addWidget(self.label_10, 0, QtCore.Qt.AlignHCenter)
         self.verticalLayout_17 = QtWidgets.QVBoxLayout()
         self.verticalLayout_17.setObjectName("verticalLayout_17")
         self.link = QtWidgets.QLabel(self.centralwidget)
@@ -418,6 +426,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "矿大课表ICS文件生成小工具"))
         self.label_9.setText(_translate("MainWindow", "校外用户记得挂VPN"))
+        self.label_10.setText(_translate("MainWindow", "使用前请确保aes.js文件在同一文件加下"))
         self.link.setText(_translate("MainWindow", "使用教程"))
         self.shower.setText(_translate("MainWindow", "请输入以下信息，并按生成按钮"))
         self.label_6.setText(_translate("MainWindow", "1.请填写或选择以下信息"))

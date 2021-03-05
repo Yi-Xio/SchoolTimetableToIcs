@@ -60,6 +60,20 @@
             </property>
            </widget>
           </item>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_10">
+            <property name="styleSheet">
+             <string notr="true">QLabel#label_10{
+	font-family:微软雅黑;
+	font-size:20px;
+	color:&quot;red&quot;
+}</string>
+            </property>
+            <property name="text">
+             <string>使用前请确保aes.js文件在同一文件加下</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_17">
             <item alignment="Qt::AlignHCenter">

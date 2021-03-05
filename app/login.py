@@ -9,6 +9,7 @@ def get_token(pwd, salt):
     path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     # print(path)
     Passwd = execjs.compile(open(path + r'\app\aes.js').read()).call('encryptPassword', pwd, salt)
+    # Passwd = execjs.compile(open(r'.\aes.js').read()).call('encryptPassword', pwd, salt)
     return Passwd
 
 
